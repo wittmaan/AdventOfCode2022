@@ -1,6 +1,8 @@
 import fileinput
 import string
 from collections import Counter
+from functools import reduce
+from operator import and_
 from typing import List
 
 # --- Day 3: Rucksack Reorganization ---
@@ -39,18 +41,7 @@ class Rucksack:
             ]
 
     def check(self):
-        if self.mode == "part1":
-            combined_priorities = (
-                self.compartments[0].priority_count
-                & self.compartments[1].priority_count
-            )
-        else:
-            combined_priorities = (
-                self.compartments[0].priority_count
-                & self.compartments[1].priority_count
-                & self.compartments[2].priority_count
-            )
-        return list(combined_priorities.keys())[0]
+        return list(reduce(and_, [_.priority_count for _ in self.compartments]))[0]
 
 
 def calc_priority_sum(dat: List[str], mode="part1") -> int:
