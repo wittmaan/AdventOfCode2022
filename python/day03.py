@@ -1,7 +1,7 @@
 import fileinput
-from typing import List
 import string
 from collections import Counter
+from typing import List
 
 # --- Day 3: Rucksack Reorganization ---
 # --- Part one ---
@@ -23,22 +23,41 @@ class Compartment:
 
 
 class Rucksack:
-    def __init__(self, items: str):
-        ind_half = int(len(items) / 2)
-        self.compartments = [
-            Compartment(items[ind_half:]),
-            Compartment(items[:ind_half]),
-        ]
+    def __init__(self, items, mode="part1"):
+        self.mode = mode
+        if mode == "part1":
+            ind_half = int(len(items) / 2)
+            self.compartments = [
+                Compartment(items[ind_half:]),
+                Compartment(items[:ind_half]),
+            ]
+        else:
+            self.compartments = [
+                Compartment(items[0]),
+                Compartment(items[1]),
+                Compartment(items[2]),
+            ]
 
     def check(self):
-        both_priorities = (
-            self.compartments[0].priority_count & self.compartments[1].priority_count
-        )
-        return list(both_priorities.keys())[0]
+        if self.mode == "part1":
+            combined_priorities = (
+                self.compartments[0].priority_count
+                & self.compartments[1].priority_count
+            )
+        else:
+            combined_priorities = (
+                self.compartments[0].priority_count
+                & self.compartments[1].priority_count
+                & self.compartments[2].priority_count
+            )
+        return list(combined_priorities.keys())[0]
 
 
-def calc_priority_sum(dat: List[str]) -> int:
-    return sum([Rucksack(_).check() for _ in dat])
+def calc_priority_sum(dat: List[str], mode="part1") -> int:
+    if mode == "part1":
+        return sum([Rucksack(_, mode).check() for _ in dat])
+    else:
+        return Rucksack(dat, mode).check()
 
 
 assert calc_priority_sum(sample_input) == 157
@@ -52,8 +71,18 @@ print(f"solution part1: {solution_part1}")
 
 # --- Part two ---
 
-# assert calc_total_score(sample_input, mode="part2") == 12
-# solution_part2 = calc_total_score(puzzle_input, mode="part2")
+
+def split_lines(dat: List[str], chunk_size=3):
+    for i in range(0, len(dat), chunk_size):
+        yield dat[i : i + chunk_size]
+
+
+assert (
+    sum([calc_priority_sum(_, mode="part2") for _ in split_lines(sample_input)]) == 70
+)
+solution_part2 = sum(
+    [calc_priority_sum(_, mode="part2") for _ in split_lines(puzzle_input)]
+)
 #
-# assert solution_part2 == 13889
-# print(f"solution part2: {solution_part2}")
+assert solution_part2 == 2668
+print(f"solution part2: {solution_part2}")
