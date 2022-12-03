@@ -74,6 +74,6 @@ assert (
 solution_part2 = sum(
     [calc_priority_sum(_, mode="part2") for _ in split_lines(puzzle_input)]
 )
-#
+
 assert solution_part2 == 2668
 print(f"solution part2: {solution_part2}")
