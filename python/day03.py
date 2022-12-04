@@ -44,11 +44,9 @@ class Rucksack:
         return list(reduce(and_, [_.priority_count for _ in self.compartments]))[0]
 
 
-def calc_priority_sum(dat: List[str], mode="part1") -> int:
-    if mode == "part1":
-        return sum([Rucksack(_, mode).check() for _ in dat])
-    else:
-        return Rucksack(dat, mode).check()
+def calc_priority_sum(dat, mode="part1") -> int:
+    dat = list(dat) if mode == "part2" else dat
+    return sum([Rucksack(_, mode).check() for _ in dat])
 
 
 assert calc_priority_sum(sample_input) == 157
@@ -68,12 +66,8 @@ def split_lines(dat: List[str], chunk_size=3):
         yield dat[i : i + chunk_size]
 
 
-assert (
-    sum([calc_priority_sum(_, mode="part2") for _ in split_lines(sample_input)]) == 70
-)
-solution_part2 = sum(
-    [calc_priority_sum(_, mode="part2") for _ in split_lines(puzzle_input)]
-)
+assert calc_priority_sum(split_lines(sample_input), mode="part2") == 70
 
+solution_part2 = calc_priority_sum(split_lines(puzzle_input), mode="part2")
 assert solution_part2 == 2668
 print(f"solution part2: {solution_part2}")
