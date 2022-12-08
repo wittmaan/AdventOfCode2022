@@ -19,38 +19,46 @@ class Grid:
         self.height = len(self.grid)
         self.width = len(self.grid[0])
 
-    def find_visible_trees(self):
+    def find_visible_trees(self) -> int:
+        # visible at the edge
         visible = self.height * 2 + self.width * 2 - 4
         for idx_row, row in enumerate(self.grid):
+            # skip edge
             if idx_row == 0 or idx_row == self.height - 1:
                 continue
 
             for idx_col, tree in enumerate(row):
+                # skip edge
                 if idx_col == 0 or idx_col == self.width - 1:
                     continue
 
-                left = [tree > t for t in row[idx_col + 1 :]]
-                right = [tree > t for t in row[:idx_col]]
-                top = [
-                    tree > self.grid[i][idx_col]
-                    for i in range(idx_row + 1, len(self.grid))
-                ]
-                bottom = [
-                    tree > self.grid[i][idx_col] for i in range(idx_row - 1, -1, -1)
-                ]
-
-                if all(left) or all(right) or all(top) or all(bottom):
+                if Grid.check_row(idx_col, row, tree) or self.check_column(
+                    idx_col, idx_row, tree
+                ):
                     visible += 1
 
         return visible
 
-    def find_highest_scenic_score(self):
+    def check_column(self, idx_col, idx_row, tree) -> bool:
+        top = [tree > self.grid[i][idx_col] for i in range(idx_row + 1, len(self.grid))]
+        bottom = [tree > self.grid[i][idx_col] for i in range(idx_row - 1, -1, -1)]
+        return all(bottom) or all(top)
+
+    @staticmethod
+    def check_row(idx_col, row, tree) -> bool:
+        left = [tree > t for t in row[idx_col + 1 :]]
+        right = [tree > t for t in row[:idx_col]]
+        return all(left) or all(right)
+
+    def find_highest_scenic_score(self) -> int:
         score = 0
         for idx_row, row in enumerate(self.grid):
+            # skip edge
             if idx_row == 0 or idx_row == self.height - 1:
                 continue
 
             for idx_col, tree in enumerate(row):
+                # skip edge
                 if idx_col == 0 or idx_col == self.width - 1:
                     continue
 
@@ -76,9 +84,7 @@ class Grid:
                     * (top - idx_row)
                     * (idx_row - bottom)
                 )
-
-                if actual_value > score:
-                    score = actual_value
+                score = max(score, actual_value)
 
         return score
 
