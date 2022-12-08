@@ -45,7 +45,7 @@ class Grid:
         return visible
 
     def find_highest_scenic_score(self):
-        best = 0
+        score = 0
         for idx_row, row in enumerate(self.grid):
             if idx_row == 0 or idx_row == self.height - 1:
                 continue
@@ -70,17 +70,17 @@ class Grid:
                     if self.grid[bottom][idx_col] >= tree:
                         break
 
-                score = (
+                actual_value = (
                     (left - idx_col)
                     * (idx_col - right)
                     * (top - idx_row)
                     * (idx_row - bottom)
                 )
 
-                if score > best:
-                    best = score
+                if actual_value > score:
+                    score = actual_value
 
-        return best
+        return score
 
 
 assert Grid(sample_input).find_visible_trees() == 21
