@@ -42,19 +42,27 @@ class Rope:
         self.mode = mode
 
     def simulate(self):
-        head = Position(0, 0)
-        tail = Position(0, 0)
-        knots = [Position(0, 0) for _ in range(10)] if self.mode == "part2" else None
         self.visited.add(Position(0, 0))
 
-        for move in self.moves:
-            for i in range(move.steps):
-                if self.mode == "part1":
-                    self.single_mode(head, move, tail)
-                else:
-                    self.multi_mode(knots, move)
+        if self.mode == "part1":
+            self.simulate_single()
+        else:
+            self.simulate_multi()
 
         return len(self.visited)
+
+    def simulate_single(self):
+        head = Position(0, 0)
+        tail = Position(0, 0)
+        for move in self.moves:
+            for i in range(move.steps):
+                self.single_mode(head, move, tail)
+
+    def simulate_multi(self):
+        knots = [Position(0, 0) for _ in range(10)]
+        for move in self.moves:
+            for i in range(move.steps):
+                self.multi_mode(knots, move)
 
     def single_mode(self, head, move, tail):
         if move.direction == "L":
@@ -69,19 +77,6 @@ class Rope:
             raise ValueError(f"unknown direction {move.direction}")
         self.update_single(head, tail)
 
-    def update_single(self, head, tail, update_visits=True):
-        if head.move_needed(tail):
-            if head.x > tail.x:
-                tail.x += 1
-            elif head.x < tail.x:
-                tail.x -= 1
-            if head.y > tail.y:
-                tail.y += 1
-            elif head.y < tail.y:
-                tail.y -= 1
-            if update_visits:
-                self.visited.add(Position(tail.x, tail.y))
-
     def multi_mode(self, knots, move):
         if move.direction == "L":
             knots[0].x -= 1
@@ -95,11 +90,22 @@ class Rope:
             raise ValueError(f"unknown direction {move.direction}")
         self.update_multi(knots)
 
+    def update_single(self, head, tail, update_visits=True):
+        if head.move_needed(tail):
+            if head.x > tail.x:
+                tail.x += 1
+            elif head.x < tail.x:
+                tail.x -= 1
+            if head.y > tail.y:
+                tail.y += 1
+            elif head.y < tail.y:
+                tail.y -= 1
+            if update_visits:
+                self.visited.add(Position(tail.x, tail.y))
+
     def update_multi(self, knots):
-        for i in range(1, len(knots)):
-            actual_position = knots[i - 1]
-            previous_position = knots[i]
-            self.update_single(actual_position, previous_position, update_visits=i == 9)
+        for step in range(1, len(knots)):
+            self.update_single(knots[step - 1], knots[step], update_visits=step == 9)
 
 
 assert Rope(sample_input).simulate() == 13
