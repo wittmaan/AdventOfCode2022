@@ -182,20 +182,20 @@ class CathodeRayTube:
         self.width = 40
         self.pixels = [DARK_PIXEL] * self.width * self.height
 
-    def execute(self, should_render=False):
+    def execute(self, should_render=False) -> int:
         X = 1
         cycle = 0
         signal_strength = 0
         for instruction in self.instructions:
             self.update_pixels(X, cycle)
             cycle += 1
-            if CathodeRayTube.update_signal_strength(cycle):
+            if CathodeRayTube.update_signal_strength_needed(cycle):
                 signal_strength += cycle * X
 
             if instruction.type == "addx":
                 self.update_pixels(X, cycle)
                 cycle += 1
-                if CathodeRayTube.update_signal_strength(cycle):
+                if CathodeRayTube.update_signal_strength_needed(cycle):
                     signal_strength += cycle * X
 
                 X += instruction.amount
@@ -214,7 +214,7 @@ class CathodeRayTube:
             self.pixels[cycle] = LIT_PIXEL
 
     @staticmethod
-    def update_signal_strength(cycle: int):
+    def update_signal_strength_needed(cycle: int):
         return (cycle - 20) % 40 == 0
 
 
