@@ -2,7 +2,7 @@ import fileinput
 from dataclasses import dataclass
 from typing import List, Optional
 
-# --- Day 9: Rope Bridge ---
+# --- Day 10: Cathode-Ray Tube ---
 # --- Part one ---
 
 sample_input1 = """noop
