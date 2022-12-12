@@ -22,11 +22,7 @@ class Position:
     elevation: int
 
     def __eq__(self, other):
-        return (
-            self.i == other.i
-            and self.j == other.j
-            # and self.elevation == other.elevation
-        )
+        return self.i == other.i and self.j == other.j
 
 
 class HillClimbing:
@@ -36,14 +32,6 @@ class HillClimbing:
         self.width = len(self.grid[0])
         self.grid[self.source.i][self.source.j].elevation = 0
         self.grid[self.target.i][self.target.j].elevation = 25
-
-        import numpy as np
-
-        elevations = np.array([[ord(char) - ord("a") for char in line] for line in dat])
-        source = tuple(x[0] for x in np.where(elevations == ord("S") - ord("a")))
-        target = tuple(x[0] for x in np.where(elevations == ord("E") - ord("a")))
-        elevations[source] = 0
-        elevations[target] = 25
 
     @staticmethod
     def fill(dat: List[str]):
