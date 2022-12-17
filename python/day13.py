@@ -63,11 +63,7 @@ class DistressSignal:
         else:
             sorted_packets = sorted(
                 self.packets,
-                key=cmp_to_key(
-                    lambda left, right: -1
-                    if DistressSignal.compare_one_packet(left, right)
-                    else 1
-                ),
+                key=cmp_to_key(lambda left, right: -1 if DistressSignal.compare_one_packet(left, right) else 1),
             )
             return (sorted_packets.index([[2]]) + 1) * (sorted_packets.index([[6]]) + 1)
 

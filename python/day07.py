@@ -49,9 +49,7 @@ class Directory:
         return [_ for _ in self.directories if _.name == name][0]
 
     def size(self):
-        return sum([file.size for file in self.files]) + sum(
-            [directory.size() for directory in self.directories]
-        )
+        return sum([file.size for file in self.files]) + sum([directory.size() for directory in self.directories])
 
 
 class Terminal:
@@ -71,15 +69,11 @@ class Terminal:
     def fill(self, command: str):
         if command.startswith("dir"):
             self.current_working_directory.directories.add(
-                Directory(
-                    name=command.split()[-1], parent=self.current_working_directory
-                )
+                Directory(name=command.split()[-1], parent=self.current_working_directory)
             )
         else:
             file_size, file_name = command.split()
-            self.current_working_directory.files.add(
-                File(name=file_name, size=int(file_size))
-            )
+            self.current_working_directory.files.add(File(name=file_name, size=int(file_size)))
 
     def run_commands(self, commands: List[str]):
         for command in commands:
@@ -112,14 +106,7 @@ class Terminal:
     def find_smallest_directory(self):
         space_needed = 30000000
         space_available = 70000000 - self.root.size()
-        return min(
-            [
-                _.size()
-                for _ in self.find(
-                    self.root, space_needed - space_available, mode="part2"
-                )
-            ]
-        )
+        return min([_.size() for _ in self.find(self.root, space_needed - space_available, mode="part2")])
 
 
 def calc_total_sizes_directories(dat: List[str]) -> int:

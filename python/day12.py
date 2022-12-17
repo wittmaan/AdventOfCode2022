@@ -41,9 +41,7 @@ class HillClimbing:
         for idx1, row in enumerate(dat):
             positions_row = []
             for idx2, char in enumerate(row):
-                positions_row.append(
-                    Position(i=idx1, j=idx2, elevation=ord(char) - ord("a"))
-                )
+                positions_row.append(Position(i=idx1, j=idx2, elevation=ord(char) - ord("a")))
                 if char == "S" and source is None:
                     source = Position(i=idx1, j=idx2, elevation=0)
                 if char == "E" and target is None:
@@ -62,11 +60,7 @@ class HillClimbing:
             # print(f"{actual_position} / {steps}")
             if mode == "part1" and actual_position == self.target:
                 return steps
-            elif (
-                mode == "part2"
-                and actual_position != self.source
-                and actual_position.elevation == 0
-            ):
+            elif mode == "part2" and actual_position != self.source and actual_position.elevation == 0:
                 return steps
             if actual_position in visited_positions:
                 continue
@@ -87,19 +81,13 @@ class HillClimbing:
             for delta in deltas:
                 if delta[0] in range(self.height) and delta[1] in range(self.width):
                     delta_position = self.get_position(delta)
-                    if (
-                        delta_position is not None
-                        and (delta_position.elevation - position.elevation) <= 1
-                    ):
+                    if delta_position is not None and (delta_position.elevation - position.elevation) <= 1:
                         result.append(delta_position)
         else:
             for delta in deltas:
                 if delta[0] in range(self.height) and delta[1] in range(self.width):
                     delta_position = self.get_position(delta)
-                    if (
-                        delta_position is not None
-                        and (position.elevation - delta_position.elevation) <= 1
-                    ):
+                    if delta_position is not None and (position.elevation - delta_position.elevation) <= 1:
                         result.append(delta_position)
         return result
 

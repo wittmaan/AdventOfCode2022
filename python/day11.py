@@ -94,17 +94,8 @@ class MonkeyInTheMiddle:
             elif "If false" in line:
                 if_false = int(line.split()[-1])
 
-            if all(
-                _ is not None
-                for _ in [items, operation, divisible_by, if_true, if_false]
-            ):
-                monkeys.append(
-                    Monkey(
-                        deque(items),
-                        operation,
-                        TestType(divisible_by, if_true, if_false),
-                    )
-                )
+            if all(_ is not None for _ in [items, operation, divisible_by, if_true, if_false]):
+                monkeys.append(Monkey(deque(items), operation, TestType(divisible_by, if_true, if_false),))
                 items = operation = divisible_by = if_true = if_false = None
 
         return monkeys
@@ -114,9 +105,7 @@ class MonkeyInTheMiddle:
             for _ in range(rounds):
                 self.play_round()
         else:
-            modulo = reduce(
-                operator.mul, [monkey.test.divisible_by for monkey in self.monkeys]
-            )
+            modulo = reduce(operator.mul, [monkey.test.divisible_by for monkey in self.monkeys])
             for _ in range(rounds):
                 self.play_round(modulo)
 
@@ -145,9 +134,7 @@ class MonkeyInTheMiddle:
         return item
 
     @staticmethod
-    def reduce_worry(
-        item: int, operation: Union[operator.floordiv, operator.mod], value: int = 3
-    ) -> int:
+    def reduce_worry(item: int, operation: Union[operator.floordiv, operator.mod], value: int = 3) -> int:
         return operation(item, value)
 
     @staticmethod

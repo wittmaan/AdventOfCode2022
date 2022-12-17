@@ -32,9 +32,7 @@ class Grid:
                 if idx_col == 0 or idx_col == self.width - 1:
                     continue
 
-                if Grid.check_row(idx_col, row, tree) or self.check_column(
-                    idx_col, idx_row, tree
-                ):
+                if Grid.check_row(idx_col, row, tree) or self.check_column(idx_col, idx_row, tree):
                     visible += 1
 
         return visible
@@ -78,12 +76,7 @@ class Grid:
                     if self.grid[bottom][idx_col] >= tree:
                         break
 
-                actual_value = (
-                    (left - idx_col)
-                    * (idx_col - right)
-                    * (top - idx_row)
-                    * (idx_row - bottom)
-                )
+                actual_value = (left - idx_col) * (idx_col - right) * (top - idx_row) * (idx_row - bottom)
                 score = max(score, actual_value)
 
         return score

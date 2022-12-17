@@ -38,12 +38,13 @@ class Sand:
 
     def simulate(self, mode="part1"):
         cave = self.fill_cave()
-        self.bottom = (
-            max([_.y for _ in cave])
-            if mode == "part1"
-            else max([_.y for _ in cave]) + 1
-        )
+        if mode == "part1":
+            return self.simulate_part1(cave)
+        else:
+            return self.simulate_part2(cave)
 
+    def simulate_part1(self, cave):
+        self.bottom = max([_.y for _ in cave])
         while True:
             actual_coordinate = SAND_COORDINATE
             is_rest = False
@@ -58,8 +59,28 @@ class Sand:
                     is_rest = True
                     cave[actual_coordinate] = SAND
 
+    def simulate_part2(self, cave):
+        self.bottom = max([_.y for _ in cave]) + 1
+        cave[SAND_COORDINATE] = SAND
+        actual_coordinate = SAND_COORDINATE
+        while True:
+            if actual_coordinate in cave:  # restart at origin
+                actual_coordinate = SAND_COORDINATE
+            for delta in DELTAS:
+                if (
+                    next_coordinate := actual_coordinate.update(delta)
+                ) not in cave and actual_coordinate.y < self.bottom:
+                    actual_coordinate = next_coordinate
+                    break
+            else:
+                cave[actual_coordinate] = SAND
+            if actual_coordinate == SAND_COORDINATE:
+                break
+        return len([_ for _ in cave.values() if _ == SAND])
+
     def fill_cave(self):
         cave = {}
+
         for path in self.paths:
             for c1, c2 in zip(path, path[1:]):
                 if c1.x == c2.x:
@@ -74,9 +95,7 @@ class Sand:
     def fill(dat: List[str]):
         result = []
         for line in dat:
-            coordinates = [
-                Coordinate(*tuple(map(int, _.split(",")))) for _ in line.split(" -> ")
-            ]
+            coordinates = [Coordinate(*tuple(map(int, _.split(",")))) for _ in line.split(" -> ")]
             result.append(coordinates)
         return result
 
@@ -90,3 +109,9 @@ assert solution_part1 == 1513
 print(f"solution part1: {solution_part1}")
 
 # --- Part two ---
+
+assert Sand(sample_input).simulate(mode="part2") == 93
+
+solution_part2 = Sand(puzzle_input).simulate(mode="part2")
+assert solution_part2 == 22646
+print(f"solution part2: {solution_part2}")

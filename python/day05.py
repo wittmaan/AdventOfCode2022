@@ -34,11 +34,7 @@ def parse_input(dat: str):
 
     instructions: List[Instruction] = []
     for instruction_entry in dat.split("\n\n")[1].split("\n"):
-        instructions.append(
-            Instruction(
-                *[int(_) for _ in instruction_entry.split(" ") if _.isnumeric()]
-            )
-        )
+        instructions.append(Instruction(*[int(_) for _ in instruction_entry.split(" ") if _.isnumeric()]))
 
     return stacks, instructions
 
