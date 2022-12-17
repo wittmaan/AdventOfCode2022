@@ -1,8 +1,9 @@
-# --- Day 13: Distress Signal ---
-# --- Part one ---
 import fileinput
 from functools import cmp_to_key
 from typing import List
+
+# --- Day 13: Distress Signal ---
+# --- Part one ---
 
 sample_input = """[1,1,3,1,1]
 [1,1,5,1,1]
