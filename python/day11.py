@@ -1,11 +1,10 @@
 import fileinput
 import operator
+import re
 from collections import deque
 from dataclasses import dataclass
 from functools import reduce
 from typing import Deque, List, Union
-import re
-
 
 # --- Day 11: Monkey in the Middle ---
 # --- Part one ---
